@@ -4,7 +4,7 @@ function Splash() {
   useEffect(() => {
     const redirectTimer = setTimeout(() => {
       // Redirect to the desired page after 2 seconds
-      window.location.href = '/invoicepage';
+      window.location.href = '/passwordpage';
     }, 2000);
 
     return () => clearTimeout(redirectTimer); // Clear the timer on unmount
