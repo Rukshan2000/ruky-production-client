@@ -119,14 +119,15 @@ function InvoiceTemplate({ data }) {
                             <p className="text-gray-700">K.V.R.U.Priyanath</p>
                         </div>
                     </div>
-                </div>
+                
 
-                <div className="flex items-center justify-between mt-20 no-break-inside">
+                <div className="flex items-center justify-between mt-20 ">
                     <img src={Qr} alt="Qr" className="h-16" />
                     <div>
                         <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span></p>
                         <p className="text-gray-700"><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span></p>
                     </div>
+                </div>
                 </div>
             </div>
             <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Invoice</button>
