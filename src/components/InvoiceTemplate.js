@@ -4,7 +4,6 @@ import Logo from "../assets/logo.png";
 import Sign from "../assets/sign.jpeg";
 import Qr from "../assets/qr.png";
 
-
 function InvoiceTemplate({ data }) {
     const invoiceRef = useRef();
 
@@ -20,7 +19,7 @@ function InvoiceTemplate({ data }) {
 
     const handlePrint = useReactToPrint({
         content: () => invoiceRef.current,
-        documentTitle: `Invoice_${cleanFileName(data.clientName)}`
+        documentTitle: `invoice-${cleanFileName(data.clientName)}`
     });
 
     return (
@@ -72,7 +71,6 @@ function InvoiceTemplate({ data }) {
                             <td colSpan="3" className="px-4 py-2 font-semibold text-right">Discount</td>
                             <td className="px-4 py-2 text-right">{data.discount || 0} {data.currency}</td>
                         </tr>
-
                         <tr>
                             <td colSpan="3" className="px-4 py-2 font-bold text-right border">Total Due</td>
                             <td className="px-4 py-2 font-bold text-right border">{calculateBalanceDue()} {data.currency}</td>
@@ -101,12 +99,10 @@ function InvoiceTemplate({ data }) {
                 </div>
                 <div className="flex items-center justify-between mt-20">
                     <img src={Qr} alt="Qr" className="h-16" />
-
                     <div>
-                        <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span> </p>
-                        <p className="text-gray-700 "><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span> </p>
+                        <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span></p>
+                        <p className="text-gray-700"><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span></p>
                     </div>
-
                 </div>
             </div>
             <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Invoice</button>
