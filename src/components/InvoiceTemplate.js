@@ -103,8 +103,8 @@ function InvoiceTemplate({ data }) {
                     <img src={Qr} alt="Qr" className="h-16" />
 
                     <div>
-                        <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span> {data.clientName}</p>
-                        <p className="text-gray-700 "><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span> {data.clientName}</p>
+                        <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span> </p>
+                        <p className="text-gray-700 "><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span> </p>
                     </div>
 
                 </div>
