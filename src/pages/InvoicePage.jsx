@@ -10,7 +10,7 @@ function InvoicePage() {
     };
 
     return (
-        <div className="min-h-screen py-10 bg-gray-900">
+        <div className="min-h-screen py-10 bg-white">
             <div className="container mx-auto">
                 {!invoiceData ? (
                     <InvoiceForm onGenerateInvoice={handleGenerateInvoice} />
