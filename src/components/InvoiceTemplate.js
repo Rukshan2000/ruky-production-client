@@ -117,7 +117,7 @@ function InvoiceTemplate({ data }) {
             {/* Switch button for toggling dark mode */}
             <div className="flex justify-center mt-4">
                 <label htmlFor="darkModeToggle" className="inline-flex items-center cursor-pointer">
-                    <span className="mr-2 text-white">Dark Mode</span>
+                    <span className="mr-2 text-black">Dark Mode</span>
                     <input type="checkbox" id="darkModeToggle" checked={darkMode} onChange={toggleDarkMode} className="w-5 h-5 text-blue-600 form-checkbox" />
                 </label>
             </div>
