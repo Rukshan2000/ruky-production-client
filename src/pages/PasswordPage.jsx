@@ -9,7 +9,7 @@ function PasswordPage() {
     e.preventDefault();
     setSubmitted(true); // Set submitted to true when the form is submitted
     if (password === correctPassword) {
-      window.location.href = '/invoicepage';
+      window.location.href = '/locate';
     } else {
       
     }

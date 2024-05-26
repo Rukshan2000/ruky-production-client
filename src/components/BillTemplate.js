@@ -2,10 +2,11 @@ import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import Logo from "../assets/logo.png";
 import Sign from "../assets/sign.jpeg";
+import Paid from "../assets/paid.jpeg";
 import Qr from "../assets/qr.png";
 
-function InvoiceTemplate({ data }) {
-    const invoiceRef = useRef();
+function BillTemplate({ data }) {
+    const billRef = useRef();
 
     const calculateBalanceDue = () => {
         const total = data.items.reduce((sum, item) => sum + parseFloat(item.total), 0);
@@ -18,8 +19,8 @@ function InvoiceTemplate({ data }) {
     };
 
     const handlePrint = useReactToPrint({
-        content: () => invoiceRef.current,
-        documentTitle: `invoice-${cleanFileName(data.clientName)}-${cleanFileName(data.invoiceNumber)}`
+        content: () => billRef.current,
+        documentTitle: `bill-${cleanFileName(data.clientName)}-${cleanFileName(data.billNumber)}`
     });
 
     return (
@@ -30,7 +31,7 @@ function InvoiceTemplate({ data }) {
                         .page-break {
                             page-break-before: always;
                         }
-                        .invoice-container {
+                        .bill-container {
                             width: 100%;
                             max-width: 210mm; /* A4 paper width */
                             margin: auto;
@@ -41,11 +42,11 @@ function InvoiceTemplate({ data }) {
                     }
                 `}
             </style>
-            <div ref={invoiceRef} className="max-w-4xl p-6 mx-auto bg-white rounded-lg invoice-container">
+            <div ref={billRef} className="max-w-4xl p-6 mx-auto bg-white rounded-lg bill-container">
                 <div className="flex items-center justify-between">
                     <img src={Logo} alt="Logo" className="h-32" />
                     <div>
-                        <p className="text-lg">INVOICE NO: #{data.invoiceNumber}</p>
+                        <p className="text-lg">BILL NO: #{data.billNumber}</p>
                         <p className="text-gray-700">Date: {data.date}</p>
                     </div>
                 </div>
@@ -102,27 +103,25 @@ function InvoiceTemplate({ data }) {
 
                 <div className="no-break-inside">
                     <div className="flex justify-between">
-                        <div className='mt-20'>
-                            <p className="text-lg font-semibold">
-                                Please Kindly Deposit / Transfer Your Payment Into The <br />
-                                Following Bank Account
-                            </p>
-                            <p className="mt-4 text-lg"><b>Bank</b>: Bank Of Ceylon</p>
-                            <p className="text-lg"><b>Name</b>: K.V. Rukshan Udaya Priyanath</p>
-                            <p className="text-lg"><b>Acc No</b>: 90924099</p>
-                            <p className="text-lg"><b>Branch</b>: Anawilundawa</p>
+
+                    <div>
+                    <img src={Paid} alt="Paid" className="h-60" />
                         </div>
-                        <div className='mt-20'>
-                            <img src={Sign} alt="Sign" className="h-20" />
+                    <div >
+                            <img src={Sign} alt="Sign" className="h-40" />
                             <p>''''''''''''''''''''''''''''''''''''''</p>
                             <h3 className="text-lg font-bold">Authorised Sign</h3>
                             <p className="text-gray-700">K.V.R.U.Priyanath</p>
                         </div>
+
                     </div>
                 
 
-                <div className="flex items-center justify-between mt-20 border-t ">
+                <div className="flex items-center justify-between mt-2 border-t">
                     <img src={Qr} alt="Qr" className="h-16" />
+                    <div>
+                        <p className="mt-5 text-gray-700"><b>Thank You For Choosing Us</b></p>
+                    </div>
                     <div>
                         <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span></p>
                         <p className="text-gray-700"><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span></p>
@@ -130,9 +129,9 @@ function InvoiceTemplate({ data }) {
                 </div>
                 </div>
             </div>
-            <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Invoice</button>
+            <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Bill</button>
         </div>
     );
 }
 
-export default InvoiceTemplate;
+export default BillTemplate;
