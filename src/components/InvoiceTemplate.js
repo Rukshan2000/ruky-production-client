@@ -24,7 +24,21 @@ function InvoiceTemplate({ data }) {
 
     return (
         <div>
-            <div ref={invoiceRef} className="max-w-4xl p-6 mx-auto bg-white rounded-lg">
+            <style>
+                {`
+                    @media print {
+                        .page-break {
+                            page-break-before: always;
+                        }
+                        .invoice-container {
+                            width: 100%;
+                            max-width: 210mm; /* A4 paper width */
+                            margin: auto;
+                        }
+                    }
+                `}
+            </style>
+            <div ref={invoiceRef} className="max-w-4xl p-6 mx-auto bg-white rounded-lg invoice-container">
                 <div className="flex items-center justify-between">
                     <img src={Logo} alt="Logo" className="h-32" />
                     <div>
@@ -63,7 +77,7 @@ function InvoiceTemplate({ data }) {
                                 <td className="px-2 py-2 text-right border">{item.total} {data.currency}</td>
                             </tr>
                         ))}
-                                                <tr>
+                        <tr>
                             <td colSpan="3" className="px-4 py-2 font-semibold text-right">Total</td>
                             <td className="px-4 py-2 text-right">{data.totalAmount || 0} {data.currency}</td>
                         </tr>
@@ -83,24 +97,27 @@ function InvoiceTemplate({ data }) {
                 </table>
                 <p className="text-red-500">{data.redNote}</p>
 
-                <div className="flex justify-between">
-                    <div className='mt-20'>
-                        <p className="text-lg font-semibold">
-                            Please Kindly Deposit / Transfer Your Payment Into The <br />
-                            Following Bank Account
-                        </p>
-                        <p className="mt-4 text-lg"><b>Bank</b>: Bank Of Ceylon</p>
-                        <p className="text-lg"><b>Name</b>: K.V. Rukshan Udaya Priyanath</p>
-                        <p className="text-lg"><b>Acc No</b>: 90924099</p>
-                        <p className="text-lg"><b>Branch</b>: Anawilundawa</p>
+                <div className="page-break">
+                    <div className="flex justify-between">
+                        <div className='mt-20'>
+                            <p className="text-lg font-semibold">
+                                Please Kindly Deposit / Transfer Your Payment Into The <br />
+                                Following Bank Account
+                            </p>
+                            <p className="mt-4 text-lg"><b>Bank</b>: Bank Of Ceylon</p>
+                            <p className="text-lg"><b>Name</b>: K.V. Rukshan Udaya Priyanath</p>
+                            <p className="text-lg"><b>Acc No</b>: 90924099</p>
+                            <p className="text-lg"><b>Branch</b>: Anawilundawa</p>
+                        </div>
+                        <div className='mt-20'>
+                            <img src={Sign} alt="Sign" className="h-20" />
+                            <p>''''''''''''''''''''''''''''''''''''''</p>
+                            <h3 className="text-lg font-bold">Authorised Sign</h3>
+                            <p className="text-gray-700">K.V.R.U.Priyanath</p>
+                        </div>
                     </div>
-                    <div className='mt-20'>
-                        <img src={Sign} alt="Sign" className="h-20" />
-                        <p>''''''''''''''''''''''''''''''''</p>
-                        <h3 className="text-lg font-bold">Authorised Sign</h3>
-                        <p className="text-gray-700">K.V.R.U.Priyanath</p>
-                    </div>
-                </div>
+               
+
                 <div className="flex items-center justify-between mt-20">
                     <img src={Qr} alt="Qr" className="h-16" />
                     <div>
@@ -108,9 +125,11 @@ function InvoiceTemplate({ data }) {
                         <p className="text-gray-700"><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span></p>
                     </div>
                 </div>
+                </div>
             </div>
             <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Invoice</button>
         </div>
+        
     );
 }
 
