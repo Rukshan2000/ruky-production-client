@@ -19,7 +19,7 @@ function PasswordPage() {
     <div className="flex items-center justify-center h-screen bg-gray-800">
       <div className="p-8 bg-gray-800 border-4 border-yellow-600 rounded">
         {/* Page title */}
-        <h1 className="mb-8 text-4xl font-bold text-yellow-600">RUKI PRODUCTION</h1>
+        <h1 className="mb-8 text-4xl font-bold text-yellow-600">RUKY PRODUCTION</h1>
         {/* Password form */}
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
           <label htmlFor="password" className="mb-4 text-white">Password:</label>
