@@ -1,12 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import Logo from "../assets/logo.png";
 import Sign from "../assets/sign.jpeg";
 import Qr from "../assets/qr.png";
-import QrDark from "../assets/qrdark.jpeg";
+
 
 function InvoiceTemplate({ data }) {
-    const [darkMode, setDarkMode] = useState(false); // State to manage dark mode
     const invoiceRef = useRef();
 
     const calculateBalanceDue = () => {
@@ -24,75 +23,69 @@ function InvoiceTemplate({ data }) {
         documentTitle: `Invoice_${cleanFileName(data.clientName)}`
     });
 
-    // Function to toggle dark mode
-    const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
-    };
-
     return (
-        <div style={{ width: '210mm', height: '297mm' }}> {/* A4 size: 210mm x 297mm */}
-            {/* Use conditional classes based on darkMode state */}
-            <div ref={invoiceRef} className={`max-w-full p-6 mx-auto ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} rounded-lg shadow-md`}>
-                {/* Invoice content */}
+        <div>
+            <div ref={invoiceRef} className="max-w-4xl p-6 mx-auto bg-white rounded-lg">
                 <div className="flex items-center justify-between">
-                    <img src={Logo} alt="Logo" className="h-16" />
+                    <img src={Logo} alt="Logo" className="h-32" />
                     <div>
                         <p className="text-lg">INVOICE NO: #{data.invoiceNumber}</p>
-                        <p className={`text-gray-700 ${darkMode ? 'text-white' : ''}`}>Date: {data.date}</p>
+                        <p className="text-gray-700">Date: {data.date}</p>
                     </div>
                 </div>
-                {/* Rest of the content */}
                 <div className="pb-4 mb-4 text-center border-b">
-                    <div className="text-2xl font-bold">Ruky Production</div>
-                    <div className="text-lg">Professional Sinhala Voice Over and Video Productions</div>
+                    <div className="text-3xl font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>Ruky Production</div>
+                    <div className="mt-2 text-lg">Sri Lankan No #1 Voice Over & Social Media Service</div>
                 </div>
                 <div className="flex justify-between mb-6">
-                    <div>
-                        <h3 className="text-lg font-bold">Customer Details</h3>
-                        <p className={`text-gray-700 mt-5 ${darkMode ? 'text-white' : ''}`}><b>Client Name:</b> {data.clientName}</p>
-                        <p className={`text-gray-700 ${darkMode ? 'text-white' : ''}`}><b>Contact No:</b> {data.clientContact}</p>
+                    <div className="flex items-start justify-start">
+                        <div>
+                            <h3 className="text-lg font-bold">Customer Details</h3>
+                            <p className="mt-5 text-gray-700">Client Name<span className="ml-2">:</span> {data.clientName}</p>
+                            <p className="text-gray-700">Contact No<span className="ml-3.5">:</span> {data.clientContact}</p>
+                        </div>
                     </div>
                 </div>
                 <table className="w-full mb-6 border-collapse">
                     <thead>
                         <tr>
-                            <th className={`px-4 py-2 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} border`}>No</th>
-                            <th className={`px-4 py-2 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} border`}>Service</th>
-                            <th className={`px-4 py-2 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} border`}>Description</th>
-                            <th className={`px-4 py-2 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} border`}>Amount ({data.currency})</th>
-                            <th className={`px-4 py-2 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'} border`}>Total ({data.currency})</th>
+                            <th className="px-4 py-2 text-left bg-gray-200 border">No</th>
+                            <th className="px-6 py-2 text-left bg-gray-200 border">Service</th>
+                            <th className="px-6 py-2 text-left bg-gray-200 border">Description</th>
+                            <th className="px-2 py-2 text-right bg-gray-200 border">Amount ({data.currency})</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.items.map((item, index) => (
                             <tr key={index}>
-                                <td className="px-4 py-2 border">{index + 1}</td>
-                                <td className="px-4 py-2 border">{item.service}</td>
-                                <td className="px-4 py-2 border">{item.description}</td>
-                                <td className="px-4 py-2 border">{item.amount} {data.currency}</td>
-                                <td className="px-4 py-2 border">{item.total} {data.currency}</td>
+                                <td className="px-2 py-2 border">{(index + 1).toString().padStart(2, '0')}</td>
+                                <td className="px-6 py-2 border">{item.service}</td>
+                                <td className="px-6 py-2 border">{item.description}</td>
+                                <td className="px-2 py-2 text-right border">{item.total} {data.currency}</td>
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan="4" className="px-4 py-2 font-semibold text-right">Discount</td>
-                            <td className="px-4 py-2">{data.discount || 0} {data.currency}</td>
+                            <td colSpan="3" className="px-4 py-2 font-semibold text-right">Advance</td>
+                            <td className="px-4 py-2 text-right">{data.advance || 0} {data.currency}</td>
                         </tr>
                         <tr>
-                            <td colSpan="4" className="px-4 py-2 font-semibold text-right">Advance</td>
-                            <td className="px-4 py-2">{data.advance || 0} {data.currency}</td>
+                            <td colSpan="3" className="px-4 py-2 font-semibold text-right">Discount</td>
+                            <td className="px-4 py-2 text-right">{data.discount || 0} {data.currency}</td>
                         </tr>
+
                         <tr>
-                            <td colSpan="4" className="px-4 py-2 font-bold text-right border">Total Due</td>
-                            <td className="px-4 py-2 font-bold border">{calculateBalanceDue()} {data.currency}</td>
+                            <td colSpan="3" className="px-4 py-2 font-bold text-right border">Total Due</td>
+                            <td className="px-4 py-2 font-bold text-right border">{calculateBalanceDue()} {data.currency}</td>
                         </tr>
                     </tbody>
                 </table>
                 <p className="text-red-500">{data.redNote}</p>
+
                 <div className="flex justify-between">
                     <div className='mt-20'>
                         <p className="text-lg font-semibold">
-                            Please kindly deposit/transfer your payment into the <br />
-                            following bank account
+                            Please Kindly Deposit / Transfer Your Payment Into The <br />
+                            Following Bank Account
                         </p>
                         <p className="mt-4 text-lg"><b>Bank</b>: Bank Of Ceylon</p>
                         <p className="text-lg"><b>Name</b>: K.V. Rukshan Udaya Priyanath</p>
@@ -101,28 +94,22 @@ function InvoiceTemplate({ data }) {
                     </div>
                     <div className='mt-20'>
                         <img src={Sign} alt="Sign" className="h-20" />
-                        <p>.................................</p>
+                        <p>''''''''''''''''''''''''''''''''</p>
                         <h3 className="text-lg font-bold">Authorised Sign</h3>
                         <p className="text-gray-700">K.V.R.U.Priyanath</p>
                     </div>
                 </div>
                 <div className="flex items-center justify-between mt-20">
-                    <img src={darkMode ? QrDark : Qr} alt="Qr" className="h-16" />
+                    <img src={Qr} alt="Qr" className="h-16" />
+
                     <div>
-                        <p className={`text-gray-700 ${darkMode ? 'text-white' : ''}`}><b>Contact</b>: +94 76 381 3014</p>
-                        <p className={`text-gray-700 ${darkMode ? 'text-white' : ''}`}><b>Email</b>: rukshanpriyanath.voice@gmail.com</p>
+                        <p className="mt-5 text-gray-700"><b>Contact</b><span className="ml-2">: +94 76 331 4026</span> {data.clientName}</p>
+                        <p className="text-gray-700 "><b>Email</b><span className="ml-6">: ruky.voice@gmail.com</span> {data.clientName}</p>
                     </div>
+
                 </div>
             </div>
-            {/* Switch button for toggling dark mode */}
-            <div className="flex justify-center mt-4">
-                <label htmlFor="darkModeToggle" className="inline-flex items-center cursor-pointer">
-                    <span className="mr-2 text-black">Dark Mode</span>
-                    <input type="checkbox" id="darkModeToggle" checked={darkMode} onChange={toggleDarkMode} className="w-5 h-5 text-blue-600 form-checkbox" />
-                </label>
-            </div>
-            {/* Button to download invoice */}
-            <button onClick={handlePrint} className={`px-4 py-2 mt-4 text-white rounded ${darkMode ? 'bg-blue-500' : 'bg-green-500'}`}>Download Invoice</button>
+            <button onClick={handlePrint} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">Download Invoice</button>
         </div>
     );
 }
