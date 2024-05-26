@@ -55,9 +55,29 @@ function InvoiceForm({ onGenerateInvoice }) {
         setFormState({ ...formState, items });
     };
 
+    const calculateTotal = () => {
+        const subTotal = formState.items.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
+        return subTotal.toFixed(2);
+    };
+
+    const calculateDiscountedTotal = () => {
+        const subTotal = calculateTotal();
+        const discountAmount = (subTotal * parseFloat(formState.discount || 0)) / 100;
+        return (subTotal - discountAmount).toFixed(2);
+    };
+
+    const calculateTotalDue = () => {
+        const discountedTotal = calculateDiscountedTotal();
+        const advance = parseFloat(formState.advance || 0);
+        return (discountedTotal - advance).toFixed(2);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        onGenerateInvoice(formState);
+        const totalAmount = calculateTotal();
+        const discountedTotal = calculateDiscountedTotal();
+        const totalDue = calculateTotalDue();
+        onGenerateInvoice({ ...formState, totalAmount, discountedTotal, totalDue });
     };
 
     // Function to toggle light mode
@@ -71,28 +91,33 @@ function InvoiceForm({ onGenerateInvoice }) {
             <div className="grid gap-4 mb-4 sm:grid-cols-1 lg:grid-cols-2">
                 <div>
                     <label className="block mb-2 font-bold">Invoice Number</label>
-                    <input type="text" name="invoiceNumber" value={formState.invoiceNumber} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="text" name="invoiceNumber" value={formState.invoiceNumber} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div>
                     <label className="block mb-2 font-bold">Client Name</label>
-                    <input type="text" name="clientName" value={formState.clientName} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="text" name="clientName" value={formState.clientName} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div>
                     <label className="block mb-2 font-bold">Client Contact</label>
-                    <input type="text" name="clientContact" value={formState.clientContact} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="text" name="clientContact" value={formState.clientContact} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div>
                     <label className="block mb-2 font-bold">Date</label>
-                    <input type="date" name="date" value={formState.date} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="date" name="date" value={formState.date} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div>
                     <label className="block mb-2 font-bold">Currency</label>
-                    <select name="currency" value={formState.currency} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}>                        <option value="LKR">LKR</option>
+                    <select name="currency" value={formState.currency} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}>
+                        <option value="LKR">LKR</option>
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="GBP">GBP</option>
@@ -109,34 +134,41 @@ className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 
             <h3 className="mb-2 text-xl font-bold">Items</h3>
             {formState.items.map((item, index) => (
                 <div key={index} className="grid gap-4 mb-4 sm:grid-cols-1 lg:grid-cols-5">
-                    <input type="text" name="service" placeholder="Service" value={item.service} onChange={(e) => handleItemChange(index, e)} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                    <input type="text" name="description" placeholder="Description" value={item.description} onChange={(e) => handleItemChange(index, e)} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                    <input type="number" name="amount" placeholder="Amount" value={item.amount} onChange={(e) => handleItemChange(index, e)} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                    <input type="number" name="total" placeholder="Total" value={item.total} readOnly 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                    <button type="button" onClick={() => removeItem(index)} className="px-4 py-2 text-white bg-red-500 rounded">Remove</button>
+                    <input type="text" name="service" placeholder="Service" value={item.service} onChange={(e) => handleItemChange(index, e)}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                    <input type="text" name="description" placeholder="Description" value={item.description} onChange={(e) => handleItemChange(index, e)}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                    <input type="number" name="amount" placeholder="Amount" value={item.amount} onChange={(e) => handleItemChange(index, e)}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                    <input type="number" name="total" placeholder="Total" value={item.total} readOnly
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                    <button type="button" onClick={() => removeItem(index)} className="px-4 py-2 text-white bg-red-500 rounded">Remove</button>
                 </div>
             ))}
             <button type="button" onClick={addItem} className="px-4 py-2 mb-4 text-white bg-blue-500 rounded">Add New Service</button>
             <div className="grid gap-4 mb-4 sm:grid-cols-1 lg:grid-cols-2">
                 <div>
-                    <label className="block mb-2 font-bold">Discount</label>
-                    <input type="number" name="discount" value={formState.discount} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <label className="block mb-2 font-bold">Discount percentage (%)</label>
+                    <input type="number" name="discount" value={formState.discount} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div>
                     <label className="block mb-2 font-bold">Advance</label>
-                    <input type="number" name="advance" value={formState.advance} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="number" name="advance" value={formState.advance} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
                 <div className="lg:col-span-2">
                     <label className="block mb-2 font-bold">Red Note</label>
-                    <input type="text" name="redNote" value={formState.redNote} onChange={handleChange} 
-className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
-/>                </div>
+                    <input type="text" placeholder='optional' name="redNote" value={formState.redNote} onChange={handleChange}
+                        className={`w-full p-2 ${lightMode ? 'text-black bg-gray-100 border-gray-400' : 'text-white bg-gray-700 border-gray-600'} border`}
+                    />
+                </div>
             </div>
             {/* Light mode switch */}
             <div className="flex justify-end mb-4">

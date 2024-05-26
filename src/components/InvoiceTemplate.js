@@ -19,7 +19,7 @@ function InvoiceTemplate({ data }) {
 
     const handlePrint = useReactToPrint({
         content: () => invoiceRef.current,
-        documentTitle: `invoice-${cleanFileName(data.clientName)}`
+        documentTitle: `invoice-${cleanFileName(data.clientName)}-${cleanFileName(data.invoiceNumber)}`
     });
 
     return (
@@ -63,17 +63,21 @@ function InvoiceTemplate({ data }) {
                                 <td className="px-2 py-2 text-right border">{item.total} {data.currency}</td>
                             </tr>
                         ))}
+                                                <tr>
+                            <td colSpan="3" className="px-4 py-2 font-semibold text-right">Total</td>
+                            <td className="px-4 py-2 text-right">{data.totalAmount || 0} {data.currency}</td>
+                        </tr>
                         <tr>
                             <td colSpan="3" className="px-4 py-2 font-semibold text-right">Advance</td>
                             <td className="px-4 py-2 text-right">{data.advance || 0} {data.currency}</td>
                         </tr>
                         <tr>
                             <td colSpan="3" className="px-4 py-2 font-semibold text-right">Discount</td>
-                            <td className="px-4 py-2 text-right">{data.discount || 0} {data.currency}</td>
+                            <td className="px-4 py-2 text-right">{data.discount || 0} %</td>
                         </tr>
                         <tr>
-                            <td colSpan="3" className="px-4 py-2 font-bold text-right border">Total Due</td>
-                            <td className="px-4 py-2 font-bold text-right border">{calculateBalanceDue()} {data.currency}</td>
+                            <td colSpan="3" className="px-4 py-2 font-bold text-right border">Full Amount</td>
+                            <td className="px-4 py-2 font-bold text-right border">{data.totalDue || 0} {data.currency}</td>
                         </tr>
                     </tbody>
                 </table>
