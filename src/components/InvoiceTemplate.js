@@ -93,7 +93,7 @@ function InvoiceTemplate({ data }) {
                             <td className="px-4 py-2 text-right">{data.discount || 0} %</td>
                         </tr>
                         <tr>
-                            <td colSpan="3" className="px-4 py-2 font-bold text-right border">Full Amount</td>
+                            <td colSpan="3" className="px-4 py-2 font-bold text-right border">Total Due</td>
                             <td className="px-4 py-2 font-bold text-right border">{data.totalDue || 0} {data.currency}</td>
                         </tr>
                     </tbody>
